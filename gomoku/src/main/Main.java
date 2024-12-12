@@ -23,5 +23,19 @@ public class Main {
 
         Jouer.play("play black A1", plateau);
         plateau.afficherPlateau();
+        
+        plateau.clearPlateau();
+
+        Jouer.play("play black A9", plateau);
+        plateau.afficherPlateau();
+
+        Jouer.play("play red A5", plateau);
+        plateau.afficherPlateau();
+
+        Jouer.play("play black CC7", plateau);
+        plateau.afficherPlateau();
+
+        plateau.quit();
+
     }
 }
