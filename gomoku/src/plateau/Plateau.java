@@ -55,4 +55,7 @@ public class Plateau {
         }
         System.out.println();
     }
+    public void quit() {
+        System.exit(0);
+    }
 }
