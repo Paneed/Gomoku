@@ -27,8 +27,8 @@ public class Jouer {
             return false;
         }
 
-        if ((couleur.equals("black") && joueur.getSymbole() != 'O') ||
-                (couleur.equals("white") && joueur.getSymbole() != 'X')) {
+        if ((couleur.equals("black") && joueur.getSymbole() != 'X') ||
+                (couleur.equals("white") && joueur.getSymbole() != 'O')) {
             System.out.println("Erreur : La couleur " + couleur + " ne correspond pas au joueur " + joueur.getName());
             return false;
         }
