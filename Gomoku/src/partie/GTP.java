@@ -16,6 +16,10 @@ import plateau.Plateau;
 public class GTP {
 
     private static boolean PartieContinue;
+    private static final String UNKNOWN_COMMAND = "? Unknown command";
+    private static final String FORMAT_INCORRECT = "? Format incorrect";
+    private static final String NUM_COMMANDE_INCORRECT = "? Le numero de la commande doit superieur au precedent";
+    private static final String HELP = "Saissisez 'help' pour plus d'information";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -24,11 +28,11 @@ public class GTP {
         IHumain joueurWhite = new JoueurWhite("W");
         BotNaif bot = new BotNaif();
         int numCommande = 1;
-
         PartieContinue = true;
+
         while (PartieContinue) {
             String commande = scanner.nextLine();
-            if(commande.startsWith("help")){
+            if(commande.startsWith("help")){ // Si 'help' est saisie
                 System.out.println("\n'§' avant '<>' signifie que l'option est facultative\n");
                 System.out.println(" §<numero_de_la_commande>  boardsize  <taille>                     Définir la taille du plateau de 1 à 26");
                 System.out.println(" §<numero_de_la_commande>  showboard                               Afficher le plateau");
@@ -38,32 +42,33 @@ public class GTP {
                 System.out.println(" §<numero_de_la_commande>  quit                                    Quitter le jeu");
                 continue;
             }
+            // On coupe la commande saisie en plusieurs fragments, les espaces sont utilisé comme separateur
             List<String> commandeFragment = new ArrayList<>(Arrays.asList(commande.split(" ")));
-            if(!estUnNombre(commandeFragment.get(0))){
+            if(!estUnNombre(commandeFragment.get(0))){ // Si la commande ne commence pas par un numero
                 commandeFragment.add(0,Integer.toString(numCommande == 1 ? 1 : numCommande + 1));
             }
-            int newNumCommande = Integer.parseInt(commandeFragment.get(0));
+            int newNumCommande = Integer.parseInt(commandeFragment.get(0)); // Le numero de la commande
             String couleur;
             String coordonnee;
             int taille;
 
-
-            if(commandeFragment.size() < 2){
-                System.out.println("? unknown command");
-                System.out.println("Saissisez 'help' pour plus d'information");
+            if(commandeFragment.size() < 2){ // Le cas ou seul un nombre est saisie
+                System.err.println(FORMAT_INCORRECT);
+                System.out.println(HELP);
                 continue;
             }
-            if (newNumCommande >= numCommande || newNumCommande == 1) {
+
+            if (newNumCommande >= numCommande || newNumCommande == 1) { // il faut que le numero de la commande saisie soit supérieur au prédecesant
                 String getCommande = commandeFragment.get(1);
 
-                switch (getCommande){
+                switch (getCommande){ // On effectue une action selon la commande saisie
                     case "boardsize" :
                         try {
                             taille = Integer.parseInt(commandeFragment.get(2));
                             plateau.boardsize(taille);
                             System.out.println("="+numCommande);
-                        } catch (NumberFormatException e) {
-                            System.out.println("Erreur : Taille du plateau invalide.");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println(e.getMessage());
                         }
                         break;
                     case "showboard" :
@@ -71,6 +76,11 @@ public class GTP {
                         plateau.showboard();
                         break;
                     case "play" :
+                        if(commandeFragment.size() != 4){ // Si tous les paramètres ne sont pas saisie
+                            System.err.println(FORMAT_INCORRECT);
+                            System.out.println(HELP);
+                            continue;
+                        }
                         couleur = commandeFragment.get(2);
                         coordonnee = commandeFragment.get(3);
                         commande = getCommande +" "+ couleur+" "+ coordonnee;
@@ -88,60 +98,67 @@ public class GTP {
                         System.out.println("="+numCommande);
                         break;
                     case "genmove":
+                        if(commandeFragment.size() != 4 && commandeFragment.size() != 3){ // Si tous les paramètres ne sont pas saisie
+                            System.err.println(FORMAT_INCORRECT);
+                            System.out.println(HELP);
+                            continue;
+                        }
                         couleur = commandeFragment.get(2);
                         String coupJoueBot;
                         char colonne;
                         String ligne;
 
-                        if (couleur.equals("black")) {
-                            if(commandeFragment.size() == 4) {
-                                int profondeur = Integer.parseInt(commandeFragment.get(3));
-                                BotMinimax botMinimax = new BotMinimax(plateau,joueurBlack.getSymbole(),joueurWhite.getSymbole(),profondeur);
-
-                                int[] coup = botMinimax.choisirCoup();
-                                plateau.setCase(coup[0], coup[1], joueurBlack.getSymbole());
-
-                                colonne = (char) ('A' + coup[1]);
-                                ligne = Integer.toString(coup[0] + 1);
-                                coupJoueBot = colonne + ligne;
-                            }else{
-                                coupJoueBot = bot.jouer(plateau, joueurBlack.getSymbole());
-
-                            }
-                        } else {
-                            if(commandeFragment.size() == 4) {
-                                int profondeur = Integer.parseInt(commandeFragment.get(3));
-                                BotMinimax botMinimax = new BotMinimax(plateau,joueurWhite.getSymbole(),joueurBlack.getSymbole(),profondeur);
-
-                                int[] coup = botMinimax.choisirCoup();
-                                plateau.setCase(coup[0], coup[1], joueurWhite.getSymbole());
-
-                                colonne = (char) ('A' + coup[1]);
-                                ligne = Integer.toString(coup[0] + 1);
-                                coupJoueBot = colonne + ligne;
-                            }else{
-                                coupJoueBot = bot.jouer(plateau, joueurWhite.getSymbole());
-                            }
+                        if (!couleur.equals("black") && !couleur.equals("white")) { // Couleur incorrecte
+                            System.err.println(FORMAT_INCORRECT);
+                            System.out.println(HELP);
+                            continue;
                         }
 
-                        if (!coupJoueBot.equals(""))
+                        // On détermine les symboles selon la couleur en parametre
+                        char symboleJoueur = couleur.equals("black") ? joueurBlack.getSymbole() : joueurWhite.getSymbole();
+                        char symboleAdversaire = couleur.equals("black") ? joueurWhite.getSymbole() : joueurBlack.getSymbole();
+
+                        if (commandeFragment.size() == 4) { // Si une profondeur est spécifiée
+                            int profondeur;
+                            try {
+                                profondeur = Integer.parseInt(commandeFragment.get(3));
+                            } catch (NumberFormatException e) {
+                                System.err.println("? La valeur '" + commandeFragment.get(3) + "' n'est pas un nombre valide.");
+                                continue;
+                            }
+
+                            // Création du BotMinimax avec la profondeur
+                            BotMinimax botMinimax = new BotMinimax(plateau, symboleJoueur, symboleAdversaire, profondeur);
+                            int[] coup = botMinimax.choisirCoup();
+                            plateau.setCase(coup[0], coup[1], symboleJoueur);
+
+                            // Conversion du coup en format A12
+                            colonne = (char) ('A' + coup[1]);
+                            ligne = Integer.toString(coup[0] + 1);
+                            coupJoueBot = colonne + ligne;
+                        } else { // Pas de profondeur spécifiée, bot aléatoire
+                            coupJoueBot = bot.jouer(plateau, symboleJoueur);
+                        }
+
+                        if (!coupJoueBot.equals("")) // Dans le cas ou le bot ne renvoie pas de position
                             System.out.println("=" + numCommande + " " + coupJoueBot);
                         break;
+
                     case "quit" :
                         System.out.println("="+numCommande);
                         plateau.quit();
-                        PartieContinue = false;
+                        PartieContinue = false; // On arrete la boucle white et donc le GTP
                         break;
                     default:
-                        System.out.println("? unknown command");
-                        System.out.println("Saissisez 'help' pour plus d'information");
+                        System.err.println(UNKNOWN_COMMAND);
+                        System.out.println(HELP);
                         continue;
 
                 }
-                numCommande = (newNumCommande == numCommande) ? newNumCommande + 1 : newNumCommande;
+                numCommande = (newNumCommande == numCommande) ? newNumCommande + 1 : newNumCommande; // On actualise le numero de la commande
             }else{
-                System.out.println("? le numero de la commande doit superieur au precedent");
-                System.out.println("Saissisez 'help' pour plus d'information");
+                System.err.println(NUM_COMMANDE_INCORRECT);
+                System.out.println(HELP);
             }
         }
     }
@@ -157,4 +174,5 @@ public class GTP {
             return false;
         }
     }
+
 }
