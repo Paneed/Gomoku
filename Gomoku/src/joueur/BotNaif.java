@@ -43,7 +43,7 @@ public class BotNaif {
 
         for (int i = 0; i < plateau.getNbLignes(); i++) {
             for (int j = 0; j < plateau.getNbColonnes(); j++) {
-                if (plateau.getCase(i, j) == '.') {  // Si la case est libre
+                if (plateau.getCase(i, j) == Plateau.CASE_VIDE) {  // Si la case est libre
                     char colonne = (char) ('A' + j);
                     int ligne = i + 1; // Ligne commence à 1 pour l'utilisateur
                     positionsLibres.add("" + colonne + ligne);

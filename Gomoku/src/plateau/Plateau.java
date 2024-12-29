@@ -3,10 +3,11 @@ package plateau;
 public class Plateau {
 
     private char[][] plateau;
+    public static final char CASE_VIDE = '.';
 
     public void boardsize (int n){
-        if (n > 26 && n <=0) {
-            throw new IllegalArgumentException("La taille du plateau ne peut dépasser 26");
+        if (n > 26 || n <=0) {
+            throw new IllegalArgumentException("Erreur : Taille du plateau invalide");
         }
         plateau = new char[n][n];
         createPlateau();
@@ -15,7 +16,7 @@ public class Plateau {
     public void createPlateau() {
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
-                plateau[i][j] = '.';
+                plateau[i][j] = CASE_VIDE;
             }
         }
     }
@@ -163,7 +164,7 @@ public class Plateau {
     public boolean estPlein() {
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
-                if (plateau[i][j] == '.') {
+                if (plateau[i][j] == CASE_VIDE) {
                     return false; // Une case vide trouvée, le plateau n'est pas plein
                 }
             }

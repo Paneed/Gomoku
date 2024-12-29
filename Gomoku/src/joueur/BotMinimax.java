@@ -16,22 +16,10 @@ public class BotMinimax {
         this.profondeur = profondeur;
     }
 
-    // Méthode pour choisir le meilleur coup
+    // Méthode principale pour choisir le meilleur coup
     public int[] choisirCoup() {
         int[] meilleurCoup = minimax(profondeur, true, Integer.MIN_VALUE, Integer.MAX_VALUE);
         return new int[]{meilleurCoup[1], meilleurCoup[2]}; // Coordonnées du meilleur coup
-    }
-
-    // Méthode pour jouer un coup
-    public String jouer(Plateau plateau, char symbole) {
-        int[] coup = choisirCoup(); // Obtenir le meilleur coup
-        int ligne = coup[0];
-        int colonne = coup[1];
-
-        // Convertir les coordonnées en format de notation classique comme "A1", "B2", etc.
-        String position = (char) ('A' + colonne) + Integer.toString(ligne + 1);
-        plateau.setCase(ligne, colonne, symbole); // Jouer le coup sur le plateau
-        return position; // Retourner la position du coup joué
     }
 
     /**
@@ -52,10 +40,10 @@ public class BotMinimax {
 
         for (int i = 0; i < plateau.getNbLignes(); i++) {
             for (int j = 0; j < plateau.getNbColonnes(); j++) {
-                if (plateau.getCase(i, j) == '.') { // Case libre
+                if (plateau.getCase(i, j) == Plateau.CASE_VIDE) { // Case libre
                     plateau.setCase(i, j, estMaximisant ? joueur : adversaire); // Simuler le coup
                     int score = minimax(profondeur - 1, !estMaximisant, alpha, beta)[0];
-                    plateau.setCase(i, j, '.'); // Annuler le coup
+                    plateau.setCase(i, j, Plateau.CASE_VIDE); // Annuler le coup
 
                     if (estMaximisant) {
                         if (score > meilleurScore) {
@@ -109,18 +97,6 @@ public class BotMinimax {
                 }
             }
         }
-
-        // Pondérer les positions centrales (ajustez les valeurs selon la taille du plateau)
-        int nbLignes = plateau.getNbLignes();
-        int nbColonnes = plateau.getNbColonnes();
-        int centreLigne = nbLignes / 2;
-        int centreColonne = nbColonnes / 2;
-
-        // Bonus pour jouer près du centre
-        if (plateau.getCase(centreLigne, centreColonne) == joueur) {
-            score += 50; // Plus de points pour jouer au centre
-        }
-
         return score;
     }
 
@@ -166,7 +142,7 @@ public class BotMinimax {
             if (plateau.estPositionValide(x, y)) {
                 if (plateau.getCase(x, y) == joueur) {
                     count++;
-                } else if (plateau.getCase(x, y) == '.') {
+                } else if (plateau.getCase(x, y) == Plateau.CASE_VIDE) {
                     espaceLibre++;
                     break;
                 } else {

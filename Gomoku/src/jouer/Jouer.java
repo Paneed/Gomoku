@@ -23,7 +23,7 @@ public class Jouer {
 
         // Vérifier si la couleur correspond au joueur
         if (!couleur.equalsIgnoreCase("black") && !couleur.equalsIgnoreCase("white")) {
-            System.out.println("Couleur invalide : " + couleur);
+            System.err.println("? Couleur invalide : " + couleur);
             return false;
         }
 
@@ -71,7 +71,7 @@ public class Jouer {
         }
 
         // Vérifier si la case est occupée
-        if (plateau.getCase(rowIndex, colIndex) != '.') {
+        if (plateau.getCase(rowIndex, colIndex) != Plateau.CASE_VIDE) {
             System.out.println(MESSAGE_POSITION_OCCUPEE);
             return false;
         }

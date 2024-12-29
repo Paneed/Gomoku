@@ -19,7 +19,7 @@ public class TestJouer {
     public void testPlayValidMove() {
         Plateau plateau = new Plateau();
         plateau.boardsize(7);
-        JoueurBlack joueur = new JoueurBlack("Player1");
+        JoueurBlack joueur = new JoueurBlack("B");
         boolean result = Jouer.placerPiece("C3", joueur.getSymbole(), plateau);
         assertEquals(true, result);
         assertEquals('X', plateau.getCase(2, 2)); // Vérifie que la pièce est placée
@@ -28,7 +28,7 @@ public class TestJouer {
     public void testPlayInvalidMoveOutOfBounds() {
         Plateau plateau = new Plateau();
         plateau.boardsize(7);
-        JoueurBlack joueur = new JoueurBlack("Player1");
+        JoueurBlack joueur = new JoueurBlack("B");
         boolean result = Jouer.placerPiece("Z9", joueur.getSymbole(), plateau);
         assertEquals(false, result); // Mouvement invalide
     }
@@ -38,7 +38,7 @@ public class TestJouer {
         Plateau plateau = new Plateau();
         plateau.boardsize(7);
         plateau.setCase(2, 2, 'X'); // Case déjà occupée
-        JoueurWhite joueur = new JoueurWhite("Player2");
+        JoueurWhite joueur = new JoueurWhite("W");
         boolean result = Jouer.placerPiece("C3", joueur.getSymbole(), plateau);
         assertEquals(false, result); // Le coup doit être rejeté
     }
@@ -47,15 +47,8 @@ public class TestJouer {
     public void testInvalidColor() {
         Plateau plateau = new Plateau();
         plateau.boardsize(7);
-        JoueurWhite joueur = new JoueurWhite("Player2");
+        JoueurWhite joueur = new JoueurWhite("W");
         boolean result = Jouer.play("play red A1", joueur, plateau);
         assertEquals(false, result); // Couleur invalide
     }
-
-    //public void test() {
-      // Plateau plateau = new Plateau();
-       //plateau.setCase(1,1,'O');
-        //assertEquals(plateau.getCase(1,1), 'O');
-
-    //}
 }
