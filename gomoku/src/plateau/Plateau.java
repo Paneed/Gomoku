@@ -6,7 +6,7 @@ public class Plateau {
 
     public void boardsize (int n){
         if (n > 26 && n <=0) {
-            throw new IllegalArgumentException("La taille du plateau ne dépasse peut dépasser 26");
+            throw new IllegalArgumentException("La taille du plateau ne peut dépasser 26");
         }
         plateau = new char[n][n];
         createPlateau();
