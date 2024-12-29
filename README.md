@@ -3,7 +3,7 @@ Projet Gomoku développer en Java.
 
 Assurant les règles de bases du Gomoku, intégrant aussi le protocol GTP.
 
-Membre de l'équipe : 
+Membres de l'équipe : 
 - Phuong Nguyen 204
 - Elsa Ferry 204
 - Kenza Brahimi 204
