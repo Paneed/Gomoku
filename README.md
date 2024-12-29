@@ -1,4 +1,7 @@
 # Gomoku
+Projet Gomoku développer en Java.
+
+Assurant les règles de bases du Gomoku, intégrant aussi le protocol GTP.
 
 Membre de l'équipe : 
 - Phuong Nguyen 204
@@ -6,10 +9,6 @@ Membre de l'équipe :
 - Kenza Brahimi 204
 - Shihong  203
 - Jordan Mvotio 203
-
-Projet Gomoku développer en Java.
-
-Assurant les règles de bases du Gomoku, intégrant aussi le protocol GTP.
 
 Fonctionnalités :
 - Jouer entre deux Humains
