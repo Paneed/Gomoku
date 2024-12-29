@@ -9,7 +9,7 @@ Membre de l'équipe :
 
 Projet Gomoku développer en Java.
 
-Assurant les regles de bases du Gomoku, intégrant aussi le protocol GTPL.
+Assurant les règles de bases du Gomoku, intégrant aussi le protocol GTP.
 
 Fonctionnalités:
 - Jouer entre deux Humains
@@ -17,3 +17,6 @@ Fonctionnalités:
 - Jouer entre un Humain et un bot utilisant l'algorithme minmax
 - Jouer entre deux bots un naif et l'autre utilisant l'algorithme minmax
 - Choix de la taille du plateau
+- Effacer le plateau
+- Quitter le jeu
+- Affichere le plateau
