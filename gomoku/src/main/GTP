@@ -96,9 +96,9 @@ public class GTP {
                         if (couleur.equals("black")) {
                             if(commandeFragment.size() == 4) {
                                 int profondeur = Integer.parseInt(commandeFragment.get(3));
-                                BotMinimax botMinimax = new BotMinimax(plateau,joueurBlack.getSymbole(),joueurWhite.getSymbole(),profondeur);
+                                BotMinmax botMinmax = new BotMinmax(plateau,joueurBlack.getSymbole(),joueurWhite.getSymbole(),profondeur);
 
-                                int[] coup = botMinimax.choisirCoup();
+                                int[] coup = botMinmax.choisirCoup();
                                 plateau.setCase(coup[0], coup[1], joueurBlack.getSymbole());
 
                                 colonne = (char) ('A' + coup[1]);
@@ -111,9 +111,9 @@ public class GTP {
                         } else {
                             if(commandeFragment.size() == 4) {
                                 int profondeur = Integer.parseInt(commandeFragment.get(3));
-                                BotMinimax botMinimax = new BotMinimax(plateau,joueurWhite.getSymbole(),joueurBlack.getSymbole(),profondeur);
+                                BotMinmax botMinmax = new BotMinmax(plateau,joueurWhite.getSymbole(),joueurBlack.getSymbole(),profondeur);
 
-                                int[] coup = botMinimax.choisirCoup();
+                                int[] coup = botMinmax.choisirCoup();
                                 plateau.setCase(coup[0], coup[1], joueurWhite.getSymbole());
 
                                 colonne = (char) ('A' + coup[1]);
