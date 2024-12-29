@@ -1,6 +1,7 @@
 package main;
 
-import joueur.BotMinmax;
+import joueur.BotMinimax;
+import joueur.BotMinimax;
 import plateau.Plateau;
 
 import java.util.Scanner;
@@ -39,7 +40,7 @@ public class Main1{
         System.out.print("Choisissez la profondeur de réflexion du bot (par exemple, 3) : ");
         int profondeurBot = Integer.parseInt(scanner.nextLine());
 
-        BotMinmax bot = new BotMinmax(plateau, symboleBot, symboleHumain, profondeurBot);
+        BotMinimax bot = new BotMinimax(plateau, symboleBot, symboleHumain, profondeurBot);
 
         PartieContinue = true;
         boolean tourHumain = true;

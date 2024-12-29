@@ -9,12 +9,12 @@ public class BotNaif {
     public BotNaif() {
     }
 
-    public boolean jouer(Plateau plateau, char symboleBot) {
+    public String jouer(Plateau plateau, char symboleBot) {
         List<String> positionsLibres = trouverCasesLibres(plateau);
 
         if (positionsLibres.isEmpty()) {
             System.out.println("Le plateau est plein. Aucun coup possible.");
-            return false;
+            return "";
         }
 
         // Choix aléatoire d'une position libre
@@ -26,7 +26,6 @@ public class BotNaif {
         int ligne = Character.getNumericValue(positionChoisie.charAt(1)) - 1;
 
         plateau.setCase(ligne, colonne - 'A', symboleBot);  // Utilisation du symbole du bot passé en paramètre
-        System.out.println("Bot joue en position : " + positionChoisie);
 
         if (plateau.verifierAlignement(symboleBot)) {
             if(symboleBot == 'O') {
@@ -36,7 +35,7 @@ public class BotNaif {
                 System.out.println("le joueur Black a gagné");
             }
         }
-        return true;
+        return positionChoisie;
     }
 
     private List<String> trouverCasesLibres(Plateau plateau) {

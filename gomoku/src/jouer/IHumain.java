@@ -9,4 +9,5 @@ public interface IHumain {
     void afficheInfos();
 
     char getSymbole();
+
 }

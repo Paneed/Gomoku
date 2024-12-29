@@ -35,16 +35,15 @@ public class Plateau {
         throw new IllegalArgumentException("Position invalide : " + ligne + ", " + colonne);
     }
 
-    public boolean setCase(int ligne, int colonne, char valeur) {
+    public void setCase(int ligne, int colonne, char valeur) {
         if (estPositionValide(ligne, colonne)) {
             plateau[ligne][colonne] = valeur;
-            return true;
         } else {
             throw new IllegalArgumentException("Position invalide : " + ligne + ", " + colonne);
         }
     }
 
-    private boolean estPositionValide(int ligne, int colonne) {
+    public boolean estPositionValide(int ligne, int colonne) {
         return ligne >= 0 && ligne < plateau.length && colonne >= 0 && colonne < plateau[0].length;
     }
 
@@ -172,7 +171,4 @@ public class Plateau {
         return true; // Aucune case vide, le plateau est plein
     }
 
-    public boolean isPositionValide(int ligne, int colonne) {
-        return estPositionValide(ligne, colonne);
-    }
 }

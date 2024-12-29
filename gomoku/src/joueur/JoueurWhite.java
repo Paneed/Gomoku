@@ -28,4 +28,6 @@ public class JoueurWhite implements IHumain {
     public char getSymbole() {
         return this.symbole;
     }
+
+
 }

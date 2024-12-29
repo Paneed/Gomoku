@@ -1,6 +1,6 @@
 package main;
 
-import  java.util.Scanner;
+import java.util.Scanner;
 
 import jouer.IHumain;
 import jouer.Jouer;
@@ -19,6 +19,7 @@ public class Main {
         IHumain joueurBlack = new JoueurBlack("Ogui");
         IHumain joueurWhite = new JoueurWhite("Phuong");
         BotNaif bot = new BotNaif();
+
 
         System.out.print("Entrez la taille du plateau (par exemple, 'boardsize 4') : ");
 
@@ -54,7 +55,7 @@ public class Main {
             } else if (commande.startsWith("play")) {
                 String[] joueurs = commande.split(" ");
 
-                // Gestion stricte des tours
+                // Gestion stricte des toursbo
                 if (tourJoueurBlack) { // Tour de Joueur Black
                     if (joueurs.length == 3 && joueurs[1].equalsIgnoreCase("Black")) {
                         if (Jouer.play(commande, joueurBlack, plateau)) {
@@ -76,14 +77,17 @@ public class Main {
                 }
             } else if (commande.equals("genmov")) {
                 // Le bot joue en utilisant le symbole du joueur actif
+                String positionChoisie;
                 if (tourJoueurBlack) {
                     System.out.println("Bot joue pour Joueur Black :");
-                    if (bot.jouer(plateau, joueurBlack.getSymbole())) {
+                    positionChoisie = bot.jouer(plateau, joueurBlack.getSymbole());
+                    if (!positionChoisie.equals("")) {
                         tourJoueurBlack = false; // Passer au joueur suivant
                     }
                 } else {
                     System.out.println("Bot joue pour Joueur White :");
-                    if (bot.jouer(plateau, joueurWhite.getSymbole())) {
+                    positionChoisie = bot.jouer(plateau, joueurWhite.getSymbole());
+                    if (!positionChoisie.equals("")) {
                         tourJoueurBlack = true; // Passer au joueur suivant
                     }
                 }
