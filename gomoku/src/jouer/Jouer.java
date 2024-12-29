@@ -5,39 +5,39 @@ import plateau.Plateau;
 public class Jouer {
 
     private static final String MESSAGE_COMMANDE_INVALIDE = "Commande invalide. Format attendu : 'play <black|white> <position>'";
-    private static final String MESSAGE_ACTION_INCONNUE = "Commande inconnue : ";
-    private static final String MESSAGE_COULEUR_INVALIDE = "Couleur invalide : ";
     private static final String MESSAGE_POSITION_INVALIDE = "Position invalide. Utilisez un format comme 'C3'.";
     private static final String MESSAGE_POSITION_HORS_LIMITE = "Position en dehors des limites du plateau.";
     private static final String MESSAGE_POSITION_OCCUPEE = "La case est déjà occupée.";
 
-    public static boolean play(String commande, Plateau plateau) {
+    public static boolean play(String commande, IHumain joueur, Plateau plateau) {
 
+        // Découper la commande
         String[] parties = commande.split(" ");
-        if (parties.length != 3) {
+        if (parties.length != 3 || !parties[0].equals("play")) {
             System.out.println(MESSAGE_COMMANDE_INVALIDE);
             return false;
         }
 
-        String action = parties[0];
         String couleur = parties[1];
         String position = parties[2];
 
-        if (!action.equals("play")) {
-            System.out.println(MESSAGE_ACTION_INCONNUE + action);
+        // Vérifier si la couleur correspond au joueur
+        if (!couleur.equalsIgnoreCase("black") && !couleur.equalsIgnoreCase("white")) {
+            System.out.println("Couleur invalide : " + couleur);
             return false;
         }
 
-        char symbole = getSymbole(couleur);
-        if (symbole == '\0') {
-            System.out.println(MESSAGE_COULEUR_INVALIDE + couleur);
+        if ((couleur.equals("black") && joueur.getSymbole() != 'O') ||
+                (couleur.equals("white") && joueur.getSymbole() != 'X')) {
+            System.out.println("Erreur : La couleur " + couleur + " ne correspond pas au joueur " + joueur.getName());
             return false;
         }
 
-        boolean coupValide = placerPiece(position, symbole, plateau);
+        // Tenter de placer la pièce
+        boolean coupValide = placerPiece(position, joueur.getSymbole(), plateau);
         if (coupValide) {
-            if (plateau.verifierAlignement(symbole)) {
-                System.out.println("Le joueur " + couleur + " a gagné !");
+            if (plateau.verifierAlignement(joueur.getSymbole())) {
+                System.out.println("Félicitations ! Le joueur " + joueur.getName() + " a gagné !");
             } else if (plateau.estPlein()) {
                 System.out.println("Match nul ! Le plateau est plein sans gagnant.");
             }
@@ -45,13 +45,6 @@ public class Jouer {
         return coupValide;
     }
 
-    private static char getSymbole(String couleur) {
-        return switch (couleur) {
-            case "black" -> 'O';
-            case "white" -> 'X';
-            default -> '\0';
-        };
-    }
 
     public static boolean placerPiece(String position, char symbole, Plateau plateau) {
         if (!position.matches("^[A-Z]+[0-9]+$")) {
@@ -60,7 +53,7 @@ public class Jouer {
         }
 
         char colonne = position.charAt(0);
-        String ligneStr = position.substring(1);  // Prendre la partie numérique de la position
+        String ligneStr = position.substring(1); // Prendre la partie numérique de la position
         int colIndex = colonne - 'A';
         int rowIndex;
 
@@ -71,17 +64,20 @@ public class Jouer {
             return false;
         }
 
+        // Vérification si la position est hors des limites du plateau
         if (colIndex < 0 || colIndex >= plateau.getNbColonnes() || rowIndex < 0 || rowIndex >= plateau.getNbLignes()) {
             System.out.println(MESSAGE_POSITION_HORS_LIMITE);
             return false;
         }
 
-        if (plateau.getCase(rowIndex, colIndex) == '.') {
-            plateau.setCase(rowIndex, colIndex, symbole);
-            return true;
-        } else {
+        // Vérifier si la case est occupée
+        if (plateau.getCase(rowIndex, colIndex) != '.') {
             System.out.println(MESSAGE_POSITION_OCCUPEE);
             return false;
         }
+
+        // Placer la pièce dans la case
+        plateau.setCase(rowIndex, colIndex, symbole);
+        return true;
     }
 }

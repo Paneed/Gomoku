@@ -1,29 +1,56 @@
 package plateau;
 
-import jouer.Jouer;
-import org.junit.Test;
-
-import static jouer.Jouer.play;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestPlateau {
 
     @Test
-    public void testGagnerAlignementHorizontal() {
-        Plateau plateau = new Plateau(7,7);
+    void testInitialisationPlateau() {
+        Plateau plateau = new Plateau();
+        plateau.boardsize(10);
 
-        play("play black A1", plateau);
-        play("play white A2", plateau);
-        play("play black B1", plateau);
-        play("play white B2", plateau);
-        play("play black C1", plateau);
-        play("play white C2", plateau);
-        play("play black D1", plateau);
-        play("play white D2", plateau);
-        play("play black E1", plateau);
+        assertEquals(10, plateau.getNbLignes());
+        assertEquals(10, plateau.getNbColonnes());
+        assertEquals('.', plateau.getCase(0, 0));
+    }
+
+    @Test
+    void testSetCaseEtGetCase() {
+        Plateau plateau = new Plateau();
+        plateau.boardsize(10);
+
+        plateau.setCase(0, 0, 'X');
+        assertEquals('X', plateau.getCase(0, 0));
+    }
+
+    @Test
+    void testVerifierAlignement() {
+        Plateau plateau = new Plateau();
+        plateau.boardsize(5);
+
+        plateau.setCase(0, 0, 'X');
+        plateau.setCase(0, 1, 'X');
+        plateau.setCase(0, 2, 'X');
+        plateau.setCase(0, 3, 'X');
+        plateau.setCase(0, 4, 'X');
 
         assertTrue(plateau.verifierAlignement('X'));
+        assertFalse(plateau.verifierAlignement('O'));
+    }
 
-        plateau.afficherPlateau();
+    @Test
+    void testEstPlein() {
+        Plateau plateau = new Plateau();
+        plateau.boardsize(3);
+
+        assertFalse(plateau.estPlein());
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                plateau.setCase(i, j, 'X');
+            }
+        }
+        assertTrue(plateau.estPlein());
     }
 }
+

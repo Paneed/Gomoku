@@ -4,25 +4,28 @@ public class Plateau {
 
     private char[][] plateau;
 
-    public Plateau() {
-        this(7, 7); // Plateau par défaut 7x7
-    }
-
-    public Plateau(int lignes, int colonnes) {
-        plateau = new char[lignes][colonnes];
+    public void boardsize (int n){
+        if (n > 26 && n <=0) {
+            throw new IllegalArgumentException("La taille du plateau ne dépasse peut dépasser 26");
+        }
+        plateau = new char[n][n];
         createPlateau();
     }
 
     public void createPlateau() {
         for (int i = 0; i < plateau.length; i++) {
             for (int j = 0; j < plateau[i].length; j++) {
-                plateau[i][j] = '.'; // Case vide
+                plateau[i][j] = '.';
             }
         }
     }
 
     public void clearPlateau() {
         createPlateau();
+    }
+
+    public void quit(){
+        System.exit(0);
     }
 
     public char getCase(int ligne, int colonne) {
@@ -32,9 +35,10 @@ public class Plateau {
         throw new IllegalArgumentException("Position invalide : " + ligne + ", " + colonne);
     }
 
-    public void setCase(int ligne, int colonne, char valeur) {
+    public boolean setCase(int ligne, int colonne, char valeur) {
         if (estPositionValide(ligne, colonne)) {
             plateau[ligne][colonne] = valeur;
+            return true;
         } else {
             throw new IllegalArgumentException("Position invalide : " + ligne + ", " + colonne);
         }
@@ -57,7 +61,7 @@ public class Plateau {
         return Math.min(minDimension, 5); // Alignement maximal de 5 pièces
     }
 
-    public void afficherPlateau() {
+    public void showboard() {
         System.out.print("   ");
         for (char c = 'A'; c < 'A' + plateau[0].length; c++) {
             System.out.printf("%2c", c);
@@ -168,4 +172,7 @@ public class Plateau {
         return true; // Aucune case vide, le plateau est plein
     }
 
+    public boolean isPositionValide(int ligne, int colonne) {
+        return estPositionValide(ligne, colonne);
+    }
 }

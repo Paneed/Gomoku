@@ -1,67 +1,96 @@
 package main;
 
-import joueur.Humain;
-import plateau.Plateau;
+import  java.util.Scanner;
+
+import jouer.IHumain;
 import jouer.Jouer;
-
-import java.util.Scanner;
-
-import static jouer.Jouer.play;
+import joueur.BotNaif;
+import joueur.JoueurBlack;
+import joueur.JoueurWhite;
+import plateau.Plateau;
 
 public class Main {
 
+    private static boolean PartieContinue;
+
     public static void main(String[] args) {
-
-        Plateau plateau = new Plateau(3, 3);
-
-
-        Humain joueur1 = new Humain("Charene", 'O');
-        Humain joueur2 = new Humain("Eric", 'X');
-
-        // Scanner pour lire les commandes des joueurs
         Scanner scanner = new Scanner(System.in);
+        Plateau plateau = new Plateau();
+        IHumain joueurBlack = new JoueurBlack("Ogui");
+        IHumain joueurWhite = new JoueurWhite("Phuong");
+        BotNaif bot = new BotNaif();
 
-        System.out.println("Début de la partie !");
-        joueur1.afficherInfo();
-        joueur2.afficherInfo();
+        System.out.print("Entrez la taille du plateau (par exemple, 'boardsize 4') : ");
 
-        // Variables de gestion du tour
-        Humain joueurActuel = joueur1; // Le joueur actuel commence par joueur1
-        boolean partieTerminee = false;
+        PartieContinue = true;
+        boolean tourJoueurBlack = true; // Le joueur Black commence toujours
 
-        // Boucle principale pour jouer
-        while (!partieTerminee) {
-            // Afficher le plateau actuel
-            plateau.afficherPlateau();
-
-            // Demander au joueur actuel de jouer
-            System.out.println(joueurActuel.getNom() + " (" + joueurActuel.getSymbole() + "), entrez votre coup (ex : play <black|white> <position>) :");
+        while (PartieContinue) {
             String commande = scanner.nextLine();
 
-            // Valider la commande
-            boolean coupValide = play(commande, plateau);
-
-            // Si le coup est valide, vérifier si ce joueur a gagné
-            if (coupValide) {
-                if (plateau.verifierAlignement(joueurActuel.getSymbole())) {
-                    System.out.println("🎉 Félicitations " + joueurActuel.getNom() + ", vous avez gagné !");
-                    plateau.afficherPlateau();
-                    partieTerminee = true;
-                } else if (plateau.estPlein()) {
-                    // Vérifier si le plateau est plein
-                    System.out.println("Match nul ! Le plateau est rempli et aucun joueur n'a gagné.");
-                    plateau.afficherPlateau();
-                    partieTerminee = true;
+            if (commande.startsWith("boardsize")) {
+                String[] parts = commande.split(" ");
+                if (parts.length == 2) {
+                    try {
+                        int taille = Integer.parseInt(parts[1]);
+                        plateau.boardsize(taille);
+                        System.out.println("Taille du plateau définie à : " + taille);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Erreur : Taille du plateau invalide.");
+                    }
                 } else {
-                    // Alterner le joueur
-                    joueurActuel = (joueurActuel == joueur1) ? joueur2 : joueur1;
+                    System.out.println("Format attendu : 'boardsize <taille>'");
+                }
+            } else if (commande.equals("showboard")) {
+                plateau.showboard();
+            } else if (commande.equals("clearboard")) {
+                plateau.clearPlateau();
+                System.out.println("Plateau réinitialisé. Joueur Black commence.");
+                tourJoueurBlack = true; // Réinitialiser le tour
+            } else if (commande.equals("quit")) {
+                plateau.quit();
+                PartieContinue = false;
+
+            } else if (commande.startsWith("play")) {
+                String[] joueurs = commande.split(" ");
+
+                // Gestion stricte des tours
+                if (tourJoueurBlack) { // Tour de Joueur Black
+                    if (joueurs.length == 3 && joueurs[1].equalsIgnoreCase("Black")) {
+                        if (Jouer.play(commande, joueurBlack, plateau)) {
+                            tourJoueurBlack = false;
+                            System.out.println("Tour de Joueur White :");
+                        }
+                    } else {
+                        System.out.println("Erreur : C'est au tour du joueur Black de jouer !");
+                    }
+                } else {
+                    if (joueurs.length == 3 && joueurs[1].equalsIgnoreCase("White")) {
+                        if (Jouer.play(commande, joueurWhite, plateau)) {
+                            tourJoueurBlack = true;
+                            System.out.println("Tour de Joueur Black :");
+                        }
+                    } else {
+                        System.out.println("Erreur : C'est au tour du joueur White de jouer !");
+                    }
+                }
+            } else if (commande.equals("genmov")) {
+                // Le bot joue en utilisant le symbole du joueur actif
+                if (tourJoueurBlack) {
+                    System.out.println("Bot joue pour Joueur Black :");
+                    if (bot.jouer(plateau, joueurBlack.getSymbole())) {
+                        tourJoueurBlack = false; // Passer au joueur suivant
+                    }
+                } else {
+                    System.out.println("Bot joue pour Joueur White :");
+                    if (bot.jouer(plateau, joueurWhite.getSymbole())) {
+                        tourJoueurBlack = true; // Passer au joueur suivant
+                    }
                 }
             } else {
-                System.out.println("Coup invalide. Réessayez !");
+                System.out.println("Commande invalide. Utilisez 'boardsize', 'play', 'showboard', 'genmov', ou 'quit'.");
             }
         }
-
-        System.out.println("Fin de la partie. Merci d'avoir joué !");
         scanner.close();
     }
 }
