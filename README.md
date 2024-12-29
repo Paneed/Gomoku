@@ -11,6 +11,7 @@ Membres de l'équipe :
 - Jordan Mvotio 203
 
 Fonctionnalités :
+
 - Jouer entre deux Humains
 - Jouer entre un Humain et un bot naif
 - Jouer entre un Humain et un bot utilisant l'algorithme minmax
@@ -27,6 +28,7 @@ Fonctionnalités :
 - Message victoire
 
 Nous pensons avoir fait toutes les fonctionnalités nécessaires pour le jeu de Gomoku.
+
 Fonctionnalités à ajouter le score et une meilleure interface du jeu.
 
 A noter :
@@ -36,12 +38,15 @@ Le BotMinimax est performant sur les petits plateaux et la profondeur conseillé
 
 
 A améliorer :
+
 Le BotMinimax n'est pas très performant pour les grands plateau et dans le GTP il choisit la facilité(choisit que la première ligne)
 
 Pour les Test: 
+
 On a réalisé deux tests : le TestPlateau qui comprend 7 tests et le TestJouer qui en comprend 5 en plus du GTP. Tout cela fonctionne.
 
 Bilan du projet: 
+
 Ce fut un projet très intéressant et amusant à réaliser car le Gomoku a permis de travailler sur plusieurs aspects du développement. 
 La mise en place des Bots, qu'il s'agisse du BotMinimax et BotNaif. Ils nous ont permis de comprendre des algorithmes ce qui ajoute
 une dimension d'intelligence artificiel au jeu. Même si le BotMinimax est pas très bien réussi et opti, quant à celui du BotNaif 
