@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import jouer.IHumain;
 import jouer.Jouer;
-import joueur.BotMinimax;
+import joueur.BotMinmax;
 import joueur.BotNaif;
 import joueur.JoueurBlack;
 import joueur.JoueurWhite;
