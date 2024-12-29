@@ -15,7 +15,16 @@ public class BotMinimax {
         this.adversaire = adversaire;
         this.profondeur = profondeur;
     }
+    public String jouer(Plateau plateau, char symbole) {
+        int[] coup = choisirCoup(); // Obtenir le meilleur coup
+        int ligne = coup[0];
+        int colonne = coup[1];
 
+        // Convertir les coordonnées en format de notation classique comme "A1", "B2", etc.
+        String position = (char) ('A' + colonne) + Integer.toString(ligne + 1);
+        plateau.setCase(ligne, colonne, symbole); // Jouer le coup sur le plateau
+        return position; // Retourner la position du coup joué
+    }
     // Méthode principale pour choisir le meilleur coup
     public int[] choisirCoup() {
         int[] meilleurCoup = minimax(profondeur, true, Integer.MIN_VALUE, Integer.MAX_VALUE);
