@@ -68,7 +68,7 @@ public class Plateau {
         }
         System.out.println();
 
-        for (int i = 0; i < plateau.length; i++) {
+        for (int i = plateau.length - 1; i >= 0; i--) {
             System.out.printf("%2d ", i + 1);
             for (int j = 0; j < plateau[i].length; j++) {
                 System.out.printf("%2c", plateau[i][j]);
